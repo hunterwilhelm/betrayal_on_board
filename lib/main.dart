@@ -58,7 +58,7 @@ class MyHomePage extends HookWidget {
     if (gameState.miniGameName == "Tic Tac Toe") {
       page = const TicTacToe();
     } else if (gameState.miniGameName == "Simon Says") {
-      page = const SimonSays();
+      page = SimonSays();
     }
     return Scaffold(
       appBar: AppBar(
