@@ -18,11 +18,6 @@ class WelcomePage extends StatelessWidget {
           Text(
             'You have pushed the button this many times:',
           ),
-          TextField(
-            onChanged: (text) {
-              gameState.setName(text);
-            },
-          ),
           GestureDetector(
             child: Text("Tick Tack Toe"),
             onTap: () {
