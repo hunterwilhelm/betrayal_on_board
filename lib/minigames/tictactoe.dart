@@ -10,26 +10,29 @@ class TicTacToe extends HookWidget {
     final gameState = GameState.of(context, listen: false);
     final winState = useState<bool?>(null);
 
-    return Column(
-      children: [
-        GestureDetector(
-          onTap: () {
-            gameState.miniGameName = "";
-          },
-          child: const Text('Back to menu'),
-        ),
-        if (winState.value == true) const Text("You win!"),
-        _Game(
-          winsRequired: 3,
-          onComplete: () {
-            winState.value = true;
-            Future.delayed(
-              const Duration(seconds: 2),
-              () => gameState.miniGameName = "",
-            );
-          },
-        )
-      ],
+    return Container(
+      color: winState.value == true ? Colors.green : Colors.white,
+      child: Column(
+        children: [
+          GestureDetector(
+            onTap: () {
+              gameState.miniGameName = "";
+            },
+            child: const Text('Back to menu'),
+          ),
+          if (winState.value == true) const Text("You win!"),
+          _Game(
+            winsRequired: 3,
+            onComplete: () {
+              winState.value = true;
+              Future.delayed(
+                const Duration(seconds: 2),
+                () => gameState.miniGameName = "",
+              );
+            },
+          )
+        ],
+      ),
     );
   }
 }
@@ -62,6 +65,7 @@ class _Game extends HookWidget {
         ticTacToeState.value[index] = player;
         if (player == "X") {
           Future.delayed(const Duration(milliseconds: 300), () {
+            if (!context.mounted) return;
             // make an array of indices 0 - 8
             final indices = List.generate(9, (index) => index);
             final empties = indices.where((element) => ticTacToeState.value[element] == "").toList();
@@ -79,9 +83,10 @@ class _Game extends HookWidget {
         final isWinX = isWinner("X", ticTacToeState.value);
         final isFull = checkIfFull(ticTacToeState.value);
         if (isFull && !isWinO && !isWinX) {
-          showLoseState.value = true;
+          showTieState.value = true;
           blockClicks.value = true;
           Future.delayed(const Duration(milliseconds: 500), () {
+            if (!context.mounted) return;
             ticTacToeState.value = List.filled(9, "");
             showLoseState.value = false;
             showWinState.value = false;
@@ -136,7 +141,7 @@ class _Game extends HookWidget {
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
-                      if (!blockClicks.value) next(index, "X");
+                      if (!blockClicks.value && winCounts.value != winsRequired) next(index, "X");
                     },
                     child: Container(
                       decoration: BoxDecoration(
