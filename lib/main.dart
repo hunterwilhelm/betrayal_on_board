@@ -1,3 +1,6 @@
+import 'package:betrayal_on_board/minigames/simonsays.dart';
+import 'package:betrayal_on_board/minigames/tictactoe.dart';
+import 'package:betrayal_on_board/pages/welcome_page.dart';
 import 'package:betrayal_on_board/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -48,26 +51,18 @@ class MyHomePage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final gameState = GameState.of(context);
+    Widget page = WelcomePage(gameState: gameState);
+
+    if (gameState.miniGameName == "Tic Tac Toe") {
+      page = const TicTacToe();
+    } else if (gameState.miniGameName == "Simon Says") {
+      page = const SimonSays();
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text(gameState.name),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            TextField(
-              onChanged: (text) {
-                gameState.setName(text);
-                gameState.hello = text;
-              },
-            ),
-          ],
-        ),
-      ),
+      body: page,
     );
   }
 }
