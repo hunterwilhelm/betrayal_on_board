@@ -11,12 +11,12 @@ class GameState extends ChangeNotifier {
     notifyListeners();
   }
 
-  String _hello = "hello";
+  String _miniGameName = "";
 
-  String get hello => _hello;
+  String get miniGameName => _miniGameName;
 
-  set hello(String value) {
-    _hello = value;
+  set miniGameName(String value) {
+    _miniGameName = value;
     notifyListeners();
   }
 }
