@@ -1,7 +1,10 @@
+import 'package:betrayal_on_board/state.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
 class SimonSays extends StatefulWidget {
+  const SimonSays({super.key});
+
   @override
   _SimonSaysState createState() => _SimonSaysState();
 }
@@ -67,42 +70,27 @@ class _SimonSaysState extends State<SimonSays> {
       }
 
       if (isCorrect) {
-        if (round < 3) {
-          setState(() {
-            round++;
-          });
+        setState(() {
+          round++;
+        });
+        if (round <= 3) {
           playerSequence.clear();
           generateSequence();
           playSequence();
         } else {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text('Task Completed!'),
-                content: Text('Move on to the next task'),
-                actions: [
-                  ElevatedButton(
-                    child: Text('Go Back'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              );
-            },
-          );
+          playerSequence.clear();
         }
       } else {
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text('Wrong Order'),
-              content: Text('You pressed the squares in the wrong order.'),
+              title: const Text('Wrong Order'),
+              content:
+                  const Text('You pressed the squares in the wrong order.'),
               actions: [
                 ElevatedButton(
-                  child: Text('Try Again'),
+                  child: const Text('Try Again'),
                   onPressed: () {
                     Navigator.of(context).pop();
                     playerSequence.clear();
@@ -119,31 +107,48 @@ class _SimonSaysState extends State<SimonSays> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        SizedBox(
-          width: 300,
-          height: 300,
-          child: GridView.builder(
-            shrinkWrap: true,
-            itemCount: 9,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              mainAxisSpacing: 8,
-              crossAxisSpacing: 8,
+    final gameState = GameState.of(context, listen: false);
+    return round == 4
+        ? Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Text("Task Completed!"),
+              ElevatedButton(
+                onPressed: () => gameState.miniGameName = "",
+                child: const Text("Go Back"),
+              )
+            ],
+          )
+        : SizedBox(
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 300,
+                  height: 300,
+                  child: GridView.builder(
+                    shrinkWrap: true,
+                    itemCount: 9,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      mainAxisSpacing: 8,
+                      crossAxisSpacing: 8,
+                    ),
+                    itemBuilder: (context, index) {
+                      return SquareWidget(
+                        checkSequence: () => checkSequence(index),
+                        isSelected: currentIndex == index,
+                      );
+                    },
+                  ),
+                ),
+                Text('Round: $round'),
+              ],
             ),
-            itemBuilder: (context, index) {
-              return SquareWidget(
-                checkSequence: () => checkSequence(index),
-                isSelected: currentIndex == index,
-              );
-            },
-          ),
-        ),
-        Text('Round: $round'),
-      ],
-    );
+          );
   }
 }
 
