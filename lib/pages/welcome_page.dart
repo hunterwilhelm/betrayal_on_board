@@ -15,22 +15,40 @@ class WelcomePage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Text(
-            'You have pushed the button this many times:',
+          TextField(
+            decoration: const InputDecoration(
+              labelText: "Name of Game",
+            ),
+            onChanged: (text) {
+              gameState.setName(text);
+            },
           ),
-          GestureDetector(
-            child: Text("Tick Tack Toe"),
-            onTap: () {
+          const SizedBox(
+            height: 8,
+          ),
+          ElevatedButton(
+            onPressed: () {
               gameState.miniGameName = "Tic Tac Toe";
             },
+            child: const Text("Tic Tac Toe"),
           ),
-          GestureDetector(
-            child: Text(
-              "Simon Says",
-            ),
-            onTap: () {
+          const SizedBox(
+            height: 8,
+          ),
+          ElevatedButton(
+            onPressed: () {
               gameState.miniGameName = "Simon Says";
             },
+            child: const Text("Simon Says"),
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          ElevatedButton(
+            onPressed: () {
+              gameState.miniGameName = "Word Match";
+            },
+            child: const Text("Word Match"),
           ),
         ],
       ),

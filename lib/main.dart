@@ -1,5 +1,6 @@
 import 'package:betrayal_on_board/minigames/simonsays.dart';
 import 'package:betrayal_on_board/minigames/tictactoe.dart';
+import 'package:betrayal_on_board/minigames/word_match.dart';
 import 'package:betrayal_on_board/pages/welcome_page.dart';
 import 'package:betrayal_on_board/state.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +35,9 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.deepOrange,
+        ),
         useMaterial3: true,
       ),
       home: ChangeNotifierProvider<GameState>(
@@ -107,7 +110,9 @@ class MyHomePage extends HookWidget {
     if (gameState.miniGameName == "Tic Tac Toe") {
       page = const TicTacToe();
     } else if (gameState.miniGameName == "Simon Says") {
-      page = const SimonSays();
+      page = SimonSays();
+    } else if (gameState.miniGameName == "Word Match") {
+      page = WordMatch();
     }
     return Scaffold(
       appBar: AppBar(
